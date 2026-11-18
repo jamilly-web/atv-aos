@@ -1,29 +1,20 @@
 const express = require('express');
+const cors = require('cors');
 const tarefaRoutes = require('./routes/tarefa');
-const sequelize = require('./database');
 
 const app = express();
 
+// Middlewares essenciais
+app.use(cors());
 app.use(express.json());
 
-// Sincroniza o banco de dados de forma segura
-sequelize.sync().catch(err => console.error("Erro ao sincronizar banco:", err));
-
-// Registra as rotas
-app.use(tarefaRoutes);
-
+// Rota de teste inicial para verificar se a API está online
 app.get('/', (req, res) => {
-  res.json({ status: "API de Tarefas funcionando!" });
+  res.json({ status: 'API rodando com sucesso na Vercel!' });
 });
 
-const PORT = process.env.PORT || 3000;
+// Registrar as rotas da aplicação
+app.use('/api', tarefaRoutes);
 
-// Ouve localmente apenas se não estiver na Vercel
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`Servidor rodando localmente na porta ${PORT}`);
-  });
-}
-
-// OBRIGATÓRIO PARA A VERCEL: exportar o app
+// Exportar a aplicação para o Vercel Serverless Function
 module.exports = app;

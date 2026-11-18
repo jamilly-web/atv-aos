@@ -1,12 +1,11 @@
-const { Router } = require('express');
+const express = require('express');
+const router = express.Router();
 const tarefaController = require('../controllers/tarefaController');
 
-const router = Router();
+// Rota para listar todas as tarefas
+router.get('/tarefas', tarefaController.listar);
 
-router.post('/tarefas', (req, res) => tarefaController.criar(req, res));
-router.get('/tarefas', (req, res) => tarefaController.listar(req, res));
-router.get('/tarefas/:objectId', (req, res) => tarefaController.buscarPorId(req, res));
-router.put('/tarefas/:objectId', (req, res) => tarefaController.atualizar(req, res));
-router.delete('/tarefas/:objectId', (req, res) => tarefaController.deletar(req, res));
+// Rota para criar uma nova tarefa
+router.post('/tarefas', tarefaController.criar);
 
 module.exports = router;

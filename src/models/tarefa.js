@@ -2,19 +2,22 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
 
 const Tarefa = sequelize.define('Tarefa', {
-  objectId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
   },
-  descricao: {
+  titulo: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   concluida: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    defaultValue: false
   }
+}, {
+  tableName: 'tarefas',
+  timestamps: true
 });
 
 module.exports = Tarefa;
