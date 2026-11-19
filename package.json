@@ -1,19 +1,19 @@
 {
-  "name": "api-tarefas",
+  "name": "express-01",
   "version": "1.0.0",
-  "description": "API RESTful para gerenciar tarefas com NeonDB, Sequelize e Zod",
+  "description": "API RESTful de Tarefas com Express, Sequelize, NeonDB e Zod",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "start": "node src/index.js"
   },
   "dependencies": {
-    "cors": "^2.8.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "pg": "^8.23.1",
+    "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.1",
-    "zod": "^3.22.4"
+    "sequelize": "^6.37.3",
+    "zod": "^3.23.8"
   }
 }

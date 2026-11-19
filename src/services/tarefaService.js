@@ -1,30 +1,54 @@
-const Tarefa = require('../models/tarefa');
+import Tarefa from '../models/tarefa.js';
 
-class TarefaService {
-  async criar(dados) {
-    return await Tarefa.create(dados);
+const criarTarefa = async ({ descricao, concluida = false }) => {
+  return await Tarefa.create({
+    descricao,
+    concluida,
+  });
+};
+
+const listarTarefas = async () => {
+  return await Tarefa.findAll();
+};
+
+const buscarTarefaPorId = async (objectId) => {
+  return await Tarefa.findByPk(objectId);
+};
+
+const atualizarTarefa = async (objectId, dadosAtualizados) => {
+  const tarefa = await Tarefa.findByPk(objectId);
+
+  if (!tarefa) {
+    return null;
   }
 
-  async listar() {
-    return await Tarefa.findAll();
+  if (dadosAtualizados.descricao !== undefined) {
+    tarefa.descricao = dadosAtualizados.descricao;
   }
 
-  async buscarPorId(objectId) {
-    return await Tarefa.findByPk(objectId);
+  if (dadosAtualizados.concluida !== undefined) {
+    tarefa.concluida = dadosAtualizados.concluida;
   }
 
-  async atualizar(objectId, dados) {
-    const tarefa = await Tarefa.findByPk(objectId);
-    if (!tarefa) return null;
-    return await tarefa.update(dados);
+  await tarefa.save();
+  return tarefa;
+};
+
+const deletarTarefa = async (objectId) => {
+  const tarefa = await Tarefa.findByPk(objectId);
+
+  if (!tarefa) {
+    return false;
   }
 
-  async deletar(objectId) {
-    const tarefa = await Tarefa.findByPk(objectId);
-    if (!tarefa) return null;
-    await tarefa.destroy();
-    return true;
-  }
-}
+  await tarefa.destroy();
+  return true;
+};
 
-module.exports = new TarefaService();
+export default {
+  criarTarefa,
+  listarTarefas,
+  buscarTarefaPorId,
+  atualizarTarefa,
+  deletarTarefa,
+};

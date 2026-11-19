@@ -1,23 +1,40 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+import { Sequelize, DataTypes } from 'sequelize';
+import pg from 'pg';
 
-const Tarefa = sequelize.define('Tarefa', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  dialectModule: pg,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
   },
-  titulo: {
+  logging: false,
+});
+
+const Tarefa = sequelize.define('tarefa', {
+  objectId: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+    allowNull: false,
+  },
+  descricao: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      notEmpty: {
+        msg: 'A descrição da tarefa é obrigatória.',
+      },
+    },
   },
   concluida: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false
-  }
-}, {
-  tableName: 'tarefas',
-  timestamps: true
+    defaultValue: false,
+    allowNull: false,
+  },
 });
 
-module.exports = Tarefa;
+export { sequelize };
+export default Tarefa;

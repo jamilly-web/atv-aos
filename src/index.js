@@ -1,20 +1,29 @@
-const express = require('express');
-const cors = require('cors');
-const tarefaRoutes = require('./routes/tarefa');
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import { sequelize } from './models/tarefa.js';
+import tarefaRoutes from './routes/tarefa.js';
 
 const app = express();
 
-// Middlewares essenciais
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Rota de teste inicial para verificar se a API está online
 app.get('/', (req, res) => {
-  res.json({ status: 'API rodando com sucesso na Vercel!' });
+  res.json({ status: 'API de Tarefas online!' });
 });
 
-// Registrar as rotas da aplicação
-app.use('/api', tarefaRoutes);
+app.use('/tarefas', tarefaRoutes);
 
-// Exportar a aplicação para o Vercel Serverless Function
-module.exports = app;
+const port = process.env.PORT || 3000;
+
+sequelize.sync().then(() => {
+  if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+      console.log(`Servidor rodando na porta ${port}`);
+    });
+  }
+});
+
+export default app;
